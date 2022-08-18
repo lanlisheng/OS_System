@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "stm32f1xx.h": "c",
-        "os_system.h": "c"
+        "stm32f7xx.h": "c",
+        "os_system.h": "c",
+        "main.h": "c"
     }
 }

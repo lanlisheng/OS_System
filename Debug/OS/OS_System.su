@@ -1,0 +1,11 @@
+../OS/OS_System.c:25:6:OS_CPUInterruptCBSRegister	16	static
+../OS/OS_System.c:32:6:OS_TaskInit	16	static
+../OS/OS_System.c:55:6:OS_CreatTask	16	static
+../OS/OS_System.c:74:6:OS_ClockInterruptHandle	16	static
+../OS/OS_System.c:97:6:OS_Start	16	static
+../OS/OS_System.c:118:6:OS_TaskGetUp	24	static
+../OS/OS_System.c:140:6:OS_TaskSleep	24	static
+../OS/OS_System.c:171:6:S_QueueEmpty	24	static
+../OS/OS_System.c:186:6:S_QueueDataIn	32	static
+../OS/OS_System.c:223:15:S_QueueDataOut	32	static
+../OS/OS_System.c:255:16:S_QueueDataLen	24	static

@@ -1,8 +1,7 @@
 #include "cpu.h"
-
 #include "OS_System.h"
 #include "main.h"
-#include "stm32f1xx.h"
+#include "stm32f7xx.h"
 
 static void hal_CoreClockInit(void);
 static void hal_CPU_Critical_Control(CPU_EA_TYPEDEF cmd, unsigned char *pSta);
@@ -31,7 +30,7 @@ void hal_CPUInit(void) {
  * 这个时钟决定任务调度的Tick值，为了保证实时性，一般设置为10ms
  */
 static void hal_CoreClockInit(void) {
-  SysTick_Config(SystemCoreClock / 100);  //嘀嗒计数：72MHZ，计数值：72000000
+  SysTick_Config(SystemCoreClock / 100); //嘀嗒计数：72MHZ，计数值：72000000
   // STM32固件库函数
   //系统时钟使用72、48、216MHZ,计数器-1=1/SystemCoreClock ms,
 }
@@ -46,7 +45,7 @@ static void hal_CoreClockInit(void) {
  */
 static unsigned char hal_getprimask(void) {
   //此函数是STM32固件库的库函数__get_PRIMASK()
-  return (!__get_PRIMASK());  // 0-总中断打开 1-总中断关闭  所以此处取反
+  return (!__get_PRIMASK()); // 0-总中断打开 1-总中断关闭  所以此处取反
 }
 
 /* 通过CPU注册函数把内核中断处理函数指针指向单片机总中断开关处理函数 */
@@ -60,13 +59,13 @@ static unsigned char hal_getprimask(void) {
  */
 void hal_CPU_Critical_Control(CPU_EA_TYPEDEF cmd, unsigned char *pSta) {
   if (cmd == CPU_ENTER_CRITICAL) {
-    *pSta = hal_getprimask();  //保存中断状态
-    __disable_irq();           //关闭CPU中断
+    *pSta = hal_getprimask(); //保存中断状态
+    __disable_irq();          //关闭CPU中断
   } else if (cmd == CPU_EXIT_CRITICAL) {
     if (*pSta) {
-      __enable_irq();  //打开CPU总中断
+      __enable_irq(); //打开CPU总中断
     } else {
-      __disbale_irq();  //关闭CPU总中断
+      __disable_irq(); //关闭CPU总中断
     }
   }
 }

@@ -1,7 +1,7 @@
-/* ÒÆÖ²Á÷³Ì£ºÈí¼şrtosÓëÓ²¼ş½áºÏ(ÄÚºËÒÆÖ²)
- * 1.°ÑOS_ClockInterruptHandle()·Åµ½µ¥Æ¬»ú¶¨Ê±Æ÷ÖĞ¶Ï´¦Àíº¯ÊıÀï£¬¶¨Ê±ÆµÂÊ10ms£¬Ò»°ã²ÉÓÃµ¥Æ¬»úsystick
- * 2.ÖØĞ´µ¥Æ¬»ú×ÜÖĞ¶Ï
- * 3.Í¨¹ıOS_CPUInterruptCBSRegister()º¯Êı°ÑÄÚºËÖĞ¶Ï´¦Àíº¯ÊıÖ¸ÕëÖ¸Ïòµ¥Æ¬»ú×ÜÖĞ¶Ï¿ª¹Ø´¦Àíº¯Êı
+/* ç§»æ¤æµç¨‹ï¼šè½¯ä»¶rtosä¸ç¡¬ä»¶ç»“åˆ(å†…æ ¸ç§»æ¤)
+ * 1.æŠŠOS_ClockInterruptHandle()æ”¾åˆ°å•ç‰‡æœºå®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°é‡Œï¼Œå®šæ—¶é¢‘ç‡10msï¼Œä¸€èˆ¬é‡‡ç”¨å•ç‰‡æœºsystick
+ * 2.é‡å†™å•ç‰‡æœºæ€»ä¸­æ–­
+ * 3.é€šè¿‡OS_CPUInterruptCBSRegister()å‡½æ•°æŠŠå†…æ ¸ä¸­æ–­å¤„ç†å‡½æ•°æŒ‡é’ˆæŒ‡å‘å•ç‰‡æœºæ€»ä¸­æ–­å¼€å…³å¤„ç†å‡½æ•°
  * * * */
 
 #include "OS_System.h"
@@ -10,15 +10,15 @@
 
 #include "main.h"
 
-CPUInterrupt_CallBack_t CPUInterruptCtrlCBS;  //¶¨ÒåÒ»¸öº¯ÊıÖ¸Õë±äÁ¿
+CPUInterrupt_CallBack_t CPUInterruptCtrlCBS; //å®šä¹‰ä¸€ä¸ªå‡½æ•°æŒ‡é’ˆå˜é‡
 
-volatile OS_TaskTypeDef OS_Task[OS_TASK_SUM];  //½á¹¹ÖĞµÄÊı¾İ²»»áÔÚÖĞ¶ÏÖĞ±»¸Ä±ä.
+volatile OS_TaskTypeDef OS_Task[OS_TASK_SUM]; //ç»“æ„ä¸­çš„æ•°æ®ä¸ä¼šåœ¨ä¸­æ–­ä¸­è¢«æ”¹å˜.
 
-//±àĞ´ÏµÍ³ÄÚºËµÚ°Ë²½£º´´½¨×¢²áCUPÖĞ¶Ï¿ØÖÆº¯Êı
+//ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬å…«æ­¥ï¼šåˆ›å»ºæ³¨å†ŒCUPä¸­æ–­æ§åˆ¶å‡½æ•°
 /*
  * Function Name : OS_CPUInterruptCBSRegister
- * Descriptin    : ×¢²áCPUÖĞ¶Ï¿ØÖÆº¯Êı
- * Input         : - pCPUInterrupCtrlCBS:cpuÖĞ¶Ï¿ØÖÆ»Øµ÷º¯ÊıµØÖ·
+ * Descriptin    : æ³¨å†ŒCPUä¸­æ–­æ§åˆ¶å‡½æ•°
+ * Input         : - pCPUInterrupCtrlCBS:cpuä¸­æ–­æ§åˆ¶å›è°ƒå‡½æ•°åœ°å€
  * Return        : None
  * Attention     : None
  */
@@ -28,7 +28,7 @@ void OS_CPUInterruptCBSRegister(CPUInterrupt_CallBack_t pCPUInterrupCtrlCBS) {
   }
 }
 
-/* ±àĞ´ÏµÍ³ÄÚºËÖ®µÚ¶ş²½:ÏµÍ³ÈÎÎñ³õÊ¼»¯ */
+/* ç¼–å†™ç³»ç»Ÿå†…æ ¸ä¹‹ç¬¬äºŒæ­¥:ç³»ç»Ÿä»»åŠ¡åˆå§‹åŒ– */
 void OS_TaskInit(void) {
   unsigned char i;
   for (i = 0; i < OS_TASK_SUM; i++) {
@@ -39,22 +39,22 @@ void OS_TaskInit(void) {
   }
 }
 
-/* ±àĞ´ÏµÍ³ÄÚºËµÚÈı²½:´´½¨ÏµÍ³ÈÎÎñº¯Êı */
+/* ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬ä¸‰æ­¥:åˆ›å»ºç³»ç»Ÿä»»åŠ¡å‡½æ•° */
 /* Function Name:void OS_CreatTask(unsigned char ID, void (*proc)(void),
 unsigned short Period, OS_TaskStatusTypeDef flag)
-* Descriptin    : ´´½¨ÈÎÎñ
-* Input         : -    ID       : ÈÎÎñID
-*                 -   (*proc)(): ÓÃ»§º¯ÊıÈë¿ÚµØÖ·
-*                 -   Period   : ÈÎÎñÖ´ĞĞÆµÂÊ,µ¥Î»:ms
-*                 -   flag     : ÈÎÎñ¾ÍĞ÷×´Ì¬:OS_SLEEP-ĞİÃß
-OS_RUN-ÔËĞĞ,¶¨Ê±»½ĞÑ,Ã»ÓĞ×÷ÓÃ
+* Descriptin    : åˆ›å»ºä»»åŠ¡
+* Input         : -    ID       : ä»»åŠ¡ID
+*                 -   (*proc)(): ç”¨æˆ·å‡½æ•°å…¥å£åœ°å€
+*                 -   Period   : ä»»åŠ¡æ‰§è¡Œé¢‘ç‡,å•ä½:ms
+*                 -   flag     : ä»»åŠ¡å°±ç»ªçŠ¶æ€:OS_SLEEP-ä¼‘çœ 
+OS_RUN-è¿è¡Œ,å®šæ—¶å”¤é†’,æ²¡æœ‰ä½œç”¨
 *Output        :  None
 *Return        :  None
 *Attention     :  None
 * */
 void OS_CreatTask(unsigned char ID, void (*proc)(void), unsigned short Period,
                   OS_TaskStatusTypeDef flag) {
-  if (!OS_Task[ID].task) {  //ÅĞ¶ÏÈÎÎñÓĞÃ»ÓĞ±»´´½¨,²»ÄÜÖØ¸´´´½¨
+  if (!OS_Task[ID].task) { //åˆ¤æ–­ä»»åŠ¡æœ‰æ²¡æœ‰è¢«åˆ›å»º,ä¸èƒ½é‡å¤åˆ›å»º
     OS_Task[ID].task = proc;
     OS_Task[ID].RunFlag = OS_SLEEP;
     OS_Task[ID].RunPeriod = Period;
@@ -62,34 +62,34 @@ void OS_CreatTask(unsigned char ID, void (*proc)(void), unsigned short Period,
   }
 }
 
-/* ±àĞ´ÏµÍ³ÄÚºËµÚËÄ²½:´´½¨ÈÎÎñÏµÍ³¶¨Ê±º¯Êı(ÏµÍ³ÈÎÎñµ÷¶Èº¯Êı) */
+/* ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬å››æ­¥:åˆ›å»ºä»»åŠ¡ç³»ç»Ÿå®šæ—¶å‡½æ•°(ç³»ç»Ÿä»»åŠ¡è°ƒåº¦å‡½æ•°) */
 /*
  * Function Name : OS_ClockInterruptHandle
- * Descriptin    : ÏµÍ³ÈÎÎñµ÷¶Èº¯Êı
+ * Descriptin    : ç³»ç»Ÿä»»åŠ¡è°ƒåº¦å‡½æ•°
  * Input         : None
  * Return        : None
- * Attention     : Îª±£Ö¤ÈÎÎñÊµÊ±ĞÔ,±ØĞë·Åµ½10msµÄ¶¨Ê±Æ÷»òÕßÏµÍ³Ê±ÖÓÖĞ¶Ïº¯ÊıÀï
+ * Attention     : ä¸ºä¿è¯ä»»åŠ¡å®æ—¶æ€§,å¿…é¡»æ”¾åˆ°10msçš„å®šæ—¶å™¨æˆ–è€…ç³»ç»Ÿæ—¶é’Ÿä¸­æ–­å‡½æ•°é‡Œ
  *
  */
 void OS_ClockInterruptHandle(void) {
   unsigned char i;
   for (i = 0; i < OS_TASK_SUM; i++) {
-    if (OS_Task[i].task) {  //Í¨¹ıtaskº¯ÊıÖ¸ÕëÖ¸Ïò²»µÈÓÚ0ÅĞ¶ÏÈÎÎñÊÇ·ñ±»´´½¨
+    if (OS_Task[i].task) { //é€šè¿‡taskå‡½æ•°æŒ‡é’ˆæŒ‡å‘ä¸ç­‰äº0åˆ¤æ–­ä»»åŠ¡æ˜¯å¦è¢«åˆ›å»º
       OS_Task[i].RunTimer++;
       if (OS_Task[i].RunTimer >=
-          OS_Task[i].RunPeriod) {  //ÅĞ¶Ï¼ÆÊ±Æ÷ÖµÊÇ·ñ´ïµ½ÈÎÎñĞèÒªÖ´ĞĞµÄÊ±¼ä
+          OS_Task[i].RunPeriod) { //åˆ¤æ–­è®¡æ—¶å™¨å€¼æ˜¯å¦è¾¾åˆ°ä»»åŠ¡éœ€è¦æ‰§è¡Œçš„æ—¶é—´
         OS_Task[i].RunTimer = 0;
         OS_Task[i].RunFlag =
-            OS_RUN;  //°ÑÈÎÎñµÄ×´Ì¬ÉèÖÃÎªÔËĞĞ×´Ì¬,ÈÎÎñµ÷¶È»áÒ»Ö±ÅĞ¶ÏÕâ¸ö±äÁ¿µÄÖµ,Èç¹ûÊÇOS_RUN¾Í»ìÖ´ĞĞtaskº¯ÊıÖ¸ÕëÖ¸ÏòµÄº¯Êı
+            OS_RUN; //æŠŠä»»åŠ¡çš„çŠ¶æ€è®¾ç½®ä¸ºè¿è¡ŒçŠ¶æ€,ä»»åŠ¡è°ƒåº¦ä¼šä¸€ç›´åˆ¤æ–­è¿™ä¸ªå˜é‡çš„å€¼,å¦‚æœæ˜¯OS_RUNå°±æ··æ‰§è¡Œtaskå‡½æ•°æŒ‡é’ˆæŒ‡å‘çš„å‡½æ•°
       }
     }
   }
 }
 
-//±àĞ´ÏµÍ³ÄÚºËµÚÎå²½£º´´½¨ÈÎÎñ¿ªÊ¼º¯Êı
+//ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬äº”æ­¥ï¼šåˆ›å»ºä»»åŠ¡å¼€å§‹å‡½æ•°
 /*
  * Function Name : void OS_Start(void)
- * Descriptin    : ¿ªÊ¼ÈÎÎñº¯Êı
+ * Descriptin    : å¼€å§‹ä»»åŠ¡å‡½æ•°
  * Input         : None
  * Return        : None
  * Attention     : None
@@ -100,17 +100,17 @@ void OS_Start(void) {
     for (i = 0; i < OS_TASK_SUM; i++) {
       if (OS_Task[i].RunFlag == OS_RUN) {
         OS_Task[i].RunFlag = OS_SLEEP;
-        (*(OS_Task[i].task))();  //Í¨¹ıº¯ÊıÖ¸ÕëÖ¸ÏòÍâ²¿µÄº¯Êı¡£´Ó¶øÊµÏÖ¹¦ÄÜ
+        (*(OS_Task[i].task))(); //é€šè¿‡å‡½æ•°æŒ‡é’ˆæŒ‡å‘å¤–éƒ¨çš„å‡½æ•°ã€‚ä»è€Œå®ç°åŠŸèƒ½
       }
     }
   }
 }
 
-//±àĞ´ÏµÍ³ÄÚºËµÚÁù²½£º´´½¨ÈÎÎñ»½ĞÑº¯Êı
+//ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬å…­æ­¥ï¼šåˆ›å»ºä»»åŠ¡å”¤é†’å‡½æ•°
 /*
  * Function Name : void OS_TaskGetUp(OS_TaskID_TypeDef taskID)
- * Descriptin    : »½ĞÑÈÎÎñº¯Êı
- * Input         : -taskID : ĞèÒª±»»½ĞÑÈÎÎñµÄID
+ * Descriptin    : å”¤é†’ä»»åŠ¡å‡½æ•°
+ * Input         : -taskID : éœ€è¦è¢«å”¤é†’ä»»åŠ¡çš„ID
  * Output        : None
  * Return        : None
  * Attention     : None
@@ -118,21 +118,21 @@ void OS_Start(void) {
 void OS_TaskGetUp(OS_TaskID_TypeDef taskID) {
   unsigned char IptStatus;
   if (CPUInterruptCtrlCBS != 0) {
-    //¹Ø±Õµ¥Æ¬»úµÄ×ÜÖĞ¶Ï£º·ÀÖ¹ÔÚÖĞ¶ÏÖĞ¸Ä±äµ±Ç°ÈÎÎñ×´Ì¬
+    //å…³é—­å•ç‰‡æœºçš„æ€»ä¸­æ–­ï¼šé˜²æ­¢åœ¨ä¸­æ–­ä¸­æ”¹å˜å½“å‰ä»»åŠ¡çŠ¶æ€
     CPUInterruptCtrlCBS(CPU_ENTER_CRITICAL, &IptStatus);
   }
   OS_Task[taskID].RunFlag = OS_RUN;
   if (CPUInterruptCtrlCBS != 0) {
-    //´ò¿ªµ¥Æ¬»úµÄ×ÜÖĞ¶Ï
+    //æ‰“å¼€å•ç‰‡æœºçš„æ€»ä¸­æ–­
     CPUInterruptCtrlCBS(CPU_EXIT_CRITICAL, &IptStatus);
   }
 }
 
-//±àĞ´ÏµÍ³ÄÚºËµÚÆß²½£º´´½¨ÈÎÎñĞİÃßº¯Êı
+//ç¼–å†™ç³»ç»Ÿå†…æ ¸ç¬¬ä¸ƒæ­¥ï¼šåˆ›å»ºä»»åŠ¡ä¼‘çœ å‡½æ•°
 /*
  * Function Name : void OS_TaskSleep(OS_TaskID_TypeDef taskID)
- * Descriptin    : »½ĞÑÈÎÎñº¯Êı
- * Input         : -taskID : ĞèÒª±»ĞİÃßÈÎÎñµÄID
+ * Descriptin    : å”¤é†’ä»»åŠ¡å‡½æ•°
+ * Input         : -taskID : éœ€è¦è¢«ä¼‘çœ ä»»åŠ¡çš„ID
  * Output        : None
  * Return        : None
  * Attention     : None
@@ -140,49 +140,49 @@ void OS_TaskGetUp(OS_TaskID_TypeDef taskID) {
 void OS_TaskSleep(OS_TaskID_TypeDef taskID) {
   unsigned char IptStatus;
   if (CPUInterruptCtrlCBS != 0) {
-    //¹Ø±Õµ¥Æ¬»úµÄ×ÜÖĞ¶Ï£º·ÀÖ¹ÔÚÖĞ¶ÏÖĞ¸Ä±äµ±Ç°ÈÎÎñ×´Ì¬
+    //å…³é—­å•ç‰‡æœºçš„æ€»ä¸­æ–­ï¼šé˜²æ­¢åœ¨ä¸­æ–­ä¸­æ”¹å˜å½“å‰ä»»åŠ¡çŠ¶æ€
     CPUInterruptCtrlCBS(CPU_ENTER_CRITICAL, &IptStatus);
   }
   OS_Task[taskID].RunFlag = OS_SLEEP;
   if (CPUInterruptCtrlCBS != 0) {
-    //´ò¿ªµ¥Æ¬»úµÄ×ÜÖĞ¶Ï
+    //æ‰“å¼€å•ç‰‡æœºçš„æ€»ä¸­æ–­
     CPUInterruptCtrlCBS(CPU_EXIT_CRITICAL, &IptStatus);
   }
 }
 
-/* ¶ÓÁĞ³ÌĞòÉè¼ÆË¼Â·
-1.¶¨Òå¶ÓÁĞ»º´æÊı×é´óĞ¡
-2.ÈëÁĞµÄ²Ù×÷:ÔõÃ´ÈëÁĞ£¬°´ÕÕË³Ğò´æ´¢µ½Êı×éÀïÃæ
-3.³öÁĞµÄ²Ù×÷£ºÏÈ½øÏÈ³öÔ­Ôò
+/* é˜Ÿåˆ—ç¨‹åºè®¾è®¡æ€è·¯
+1.å®šä¹‰é˜Ÿåˆ—ç¼“å­˜æ•°ç»„å¤§å°
+2.å…¥åˆ—çš„æ“ä½œ:æ€ä¹ˆå…¥åˆ—ï¼ŒæŒ‰ç…§é¡ºåºå­˜å‚¨åˆ°æ•°ç»„é‡Œé¢
+3.å‡ºåˆ—çš„æ“ä½œï¼šå…ˆè¿›å…ˆå‡ºåŸåˆ™
  */
 
-/* ÈëÁĞ²Ù×÷£º
-1.¶ÓÁĞµÄ»º´æ¿ÉÒÔ´æ´¢µÄÊı×éĞ¡±êÎ»ÖÃ
-2.¶ÓÁĞÊÇ·ñÂúÁË£¬ºóĞøÓ¦¸ÃÔõÃ´´¦Àí
+/* å…¥åˆ—æ“ä½œï¼š
+1.é˜Ÿåˆ—çš„ç¼“å­˜å¯ä»¥å­˜å‚¨çš„æ•°ç»„å°æ ‡ä½ç½®
+2.é˜Ÿåˆ—æ˜¯å¦æ»¡äº†ï¼Œåç»­åº”è¯¥æ€ä¹ˆå¤„ç†
  */
 
 /********************************************************************************************************
- *  @º¯ÊıÃû   S_QueueEmpty
- *  @ÃèÊö     Çå¿ÕÒ»¸ö¶ÓÁĞ
- *  @²ÎÊı     Head-¶ÓÁĞÍ·µØÖ·,  Tail-¶ÓÁĞÎ²µØÖ·,   pBuff-¶ÓÁĞ»º´æ
- *  @·µ»ØÖµ   ÎŞ
- *  @×¢Òâ    ÎŞ
+ *  @å‡½æ•°å   S_QueueEmpty
+ *  @æè¿°     æ¸…ç©ºä¸€ä¸ªé˜Ÿåˆ—
+ *  @å‚æ•°     Head-é˜Ÿåˆ—å¤´åœ°å€,  Tail-é˜Ÿåˆ—å°¾åœ°å€,   pBuff-é˜Ÿåˆ—ç¼“å­˜
+ *  @è¿”å›å€¼   æ— 
+ *  @æ³¨æ„    æ— 
  ********************************************************************************************************/
 void S_QueueEmpty(unsigned char **Head, unsigned char **Tail,
                   unsigned char *pBuff) {
-  //¶ÓÁĞµÄ³õÊ¼»¯¹ı³Ì
+  //é˜Ÿåˆ—çš„åˆå§‹åŒ–è¿‡ç¨‹
   *Head = pBuff;
   *Tail = pBuff;
 }
 
 /********************************************************************************************************
- *  @º¯ÊıÃû   S_QueueDataIn
- *  @ÃèÊö     ÊäÈëÒ»¸ö×Ö½ÚÊı¾İ½ø¶ÓÁĞ
- *  @²ÎÊı     Head-¶ÓÁĞÍ·µØÖ·,  Tail-¶ÓÁĞÎ²µØÖ·,   pBuff-¶ÓÁĞ»º´æ
- *  @·µ»ØÖµ   ÎŞ
- *  @×¢Òâ     ÎŞ
+ *  @å‡½æ•°å   S_QueueDataIn
+ *  @æè¿°     è¾“å…¥ä¸€ä¸ªå­—èŠ‚æ•°æ®è¿›é˜Ÿåˆ—
+ *  @å‚æ•°     Head-é˜Ÿåˆ—å¤´åœ°å€,  Tail-é˜Ÿåˆ—å°¾åœ°å€,   pBuff-é˜Ÿåˆ—ç¼“å­˜
+ *  @è¿”å›å€¼   æ— 
+ *  @æ³¨æ„     æ— 
  ********************************************************************************************************/
-/* ¶ÓÁĞÊı¾İµÄÈëÁĞ²Ù×÷ */
+/* é˜Ÿåˆ—æ•°æ®çš„å…¥åˆ—æ“ä½œ */
 void S_QueueDataIn(unsigned char **Head, unsigned char **Tail,
                    unsigned char *pBuff, unsigned char Len,
                    unsigned char *pData, unsigned char DataLen) {
@@ -192,16 +192,16 @@ void S_QueueDataIn(unsigned char **Head, unsigned char **Tail,
     CPUInterruptCtrlCBS(CPU_ENTER_CRITICAL, &IptStatus);
   }
   for (num = 0; num < DataLen; num++, pData++) {
-    //µ¥¸öµ¥¸öÈëÁĞµÄ²Ù×÷
-    **Tail = *pData;  //Êı¾İÈëÁĞ
-    (*Tail)++;        //¶ÓÎ²Ö¸Õë¼Ó1
+    //å•ä¸ªå•ä¸ªå…¥åˆ—çš„æ“ä½œ
+    **Tail = *pData; //æ•°æ®å…¥åˆ—
+    (*Tail)++;       //é˜Ÿå°¾æŒ‡é’ˆåŠ 1
 
-    //ÅĞ¶Ï¶ÓÁĞÊı¾İÊÇ·ñÂúÁË
+    //åˆ¤æ–­é˜Ÿåˆ—æ•°æ®æ˜¯å¦æ»¡äº†
     if (*Tail == pBuff + Len) {
-      //Êı×éÊ×µØÖ·¼ÓÉÏÈëÁĞÊı¾İ³¤¶È
+      //æ•°ç»„é¦–åœ°å€åŠ ä¸Šå…¥åˆ—æ•°æ®é•¿åº¦
       *Tail = pBuff;
     }
-    //¶ÓÎ²Ö¸ÕëÓë¶ÔÍ·Ö¸Õë²úÉú³åÍ»£ºÖ»ÈëÁĞ£¬²»³öÁĞµÄÇé¿ö£¬·ÀÖ¹Î¥±³ÏÈ½øÏÈ³öÔ­Ôò
+    //é˜Ÿå°¾æŒ‡é’ˆä¸å¯¹å¤´æŒ‡é’ˆäº§ç”Ÿå†²çªï¼šåªå…¥åˆ—ï¼Œä¸å‡ºåˆ—çš„æƒ…å†µï¼Œé˜²æ­¢è¿èƒŒå…ˆè¿›å…ˆå‡ºåŸåˆ™
     if (*Tail == *Head) {
       if (++(*Head) == pBuff + Len) {
         *Head = pBuff;
@@ -214,11 +214,11 @@ void S_QueueDataIn(unsigned char **Head, unsigned char **Tail,
 }
 
 /********************************************************************************************************
- *  @º¯ÊıÃû   S_QueueDataOut
- *  @ÃèÊö     ´Ó¶ÓÁĞÀïÈ¡³öÒ»¸öÊı¾İ
- *  @²ÎÊı     Head-¶ÓÁĞÍ·µØÖ·,  Tail-¶ÓÁĞÎ²µØÖ·,   pBuff-¶ÓÁĞ»º´æ
- *  @·µ»ØÖµ   È¡³öµÄÊı¾İ
- *  @×¢Òâ     ÎŞ
+ *  @å‡½æ•°å   S_QueueDataOut
+ *  @æè¿°     ä»é˜Ÿåˆ—é‡Œå–å‡ºä¸€ä¸ªæ•°æ®
+ *  @å‚æ•°     Head-é˜Ÿåˆ—å¤´åœ°å€,  Tail-é˜Ÿåˆ—å°¾åœ°å€,   pBuff-é˜Ÿåˆ—ç¼“å­˜
+ *  @è¿”å›å€¼   å–å‡ºçš„æ•°æ®
+ *  @æ³¨æ„     æ— 
  ********************************************************************************************************/
 unsigned char S_QueueDataOut(unsigned char **Head, unsigned char **Tail,
                              unsigned char *pBuff, unsigned char Len,
@@ -230,9 +230,9 @@ unsigned char S_QueueDataOut(unsigned char **Head, unsigned char **Tail,
   }
 
   *pData = 0;
-  //³öÁĞĞèÒªÏÈÅĞ¶Ï»º´æÖĞÓĞÎŞÊı¾İ
+  //å‡ºåˆ—éœ€è¦å…ˆåˆ¤æ–­ç¼“å­˜ä¸­æœ‰æ— æ•°æ®
   if (*Head != *Tail) {
-    //¶ÓÁĞ»º´æÖĞ´æÔÚÊı¾İ
+    //é˜Ÿåˆ—ç¼“å­˜ä¸­å­˜åœ¨æ•°æ®
     *pData = **Head;
     status = 1;
     if (++(*Head) == pBuff + Len) {
@@ -246,20 +246,20 @@ unsigned char S_QueueDataOut(unsigned char **Head, unsigned char **Tail,
 }
 
 /********************************************************************************************************
- *  @º¯ÊıÃû   S_QueueDataLen
- *  @ÃèÊö     ÅĞ¶Ï¶ÓÁĞÀïÊı¾İµÄ³¤¶È
- *  @²ÎÊı     Head-¶ÓÁĞÍ·µØÖ·,  Tail-¶ÓÁĞÎ²µØÖ·,   HBuff-¶ÓÁĞ»º´æ
- *  @·µ»ØÖµ   ¶ÓÁĞÀïÓĞÊı¾İ¸öÊı
- *  @×¢Òâ     ÎŞ
+ *  @å‡½æ•°å   S_QueueDataLen
+ *  @æè¿°     åˆ¤æ–­é˜Ÿåˆ—é‡Œæ•°æ®çš„é•¿åº¦
+ *  @å‚æ•°     Head-é˜Ÿåˆ—å¤´åœ°å€,  Tail-é˜Ÿåˆ—å°¾åœ°å€,   HBuff-é˜Ÿåˆ—ç¼“å­˜
+ *  @è¿”å›å€¼   é˜Ÿåˆ—é‡Œæœ‰æ•°æ®ä¸ªæ•°
+ *  @æ³¨æ„     æ— 
  ********************************************************************************************************/
 unsigned short S_QueueDataLen(unsigned char **Head, unsigned char **Tail,
                               unsigned char *pBuff, unsigned char Len) {
-  //»ñÈ¡¶ÓÁĞÖĞµÄ»º´æ³¤¶È
+  //è·å–é˜Ÿåˆ—ä¸­çš„ç¼“å­˜é•¿åº¦
   if (*Tail > *Head) {
     return (*Tail - *Head);
   }
 
-  //µ±ÈëÁĞºÜ¶àÊı¾İ£¬²¢ÇÒ¶ÓÁĞÖĞÃ»ÓĞ½øĞĞ³öÁĞ²Ù×÷£¬»á´æÔÚ¶ÓÍ·Ö¸Õë´óÓÚ¶ÓÎ²Ö¸Õë
+  //å½“å…¥åˆ—å¾ˆå¤šæ•°æ®ï¼Œå¹¶ä¸”é˜Ÿåˆ—ä¸­æ²¡æœ‰è¿›è¡Œå‡ºåˆ—æ“ä½œï¼Œä¼šå­˜åœ¨é˜Ÿå¤´æŒ‡é’ˆå¤§äºé˜Ÿå°¾æŒ‡é’ˆ
   if (*Tail > *Head) {
     return (*Tail + Len - *Head);
   }
