@@ -7,6 +7,7 @@
 "./Core/Src/syscalls.o"
 "./Core/Src/sysmem.o"
 "./Core/Src/system_stm32f7xx.o"
+"./Core/Src/tim.o"
 "./Core/Src/usart.o"
 "./Core/Startup/startup_stm32f767igtx.o"
 "./Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.o"
@@ -29,3 +30,4 @@
 "./Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart_ex.o"
 "./LED/led.o"
 "./OS/OS_System.o"
+"./TIME/hal_timer.o"

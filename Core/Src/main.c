@@ -19,13 +19,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "OS_System.h"
 #include "cpu.h"
+#include "hal_time.h"
 #include "led.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,19 +91,26 @@ int main(void) {
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-   hal_CPUInit();
-   OS_TaskInit();
-   OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN);
-   OS_Start();
+  HAL_TIM_Base_Start_IT(&htim4);
+  hal_CPUInit();
+  OS_TaskInit();
+  hal_TimeInit();
+
+  hal_CreatTimer(T_LED, hal_ledProc, 20000,
+                 T_STA_START); /* 定时器中断测试功能 */
+
+  // OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN);/* OS 测试任务 */
+  OS_Start();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-//    HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
-//    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-//    HAL_Delay(20);
+    //    HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+    //    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    //    HAL_Delay(20);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

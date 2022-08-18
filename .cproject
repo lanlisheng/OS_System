@@ -50,6 +50,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/STM32F767IGT6_OS/OS}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/STM32F767IGT6_OS/LED}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/STM32F767IGT6_OS/CPU}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/STM32F767IGT6_OS/TIME}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.989367829" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -81,6 +82,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="LED"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="OS"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="TIME"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

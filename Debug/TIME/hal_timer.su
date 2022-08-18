@@ -1,0 +1,8 @@
+../TIME/hal_timer.c:10:6:hal_TimeInit	16	static
+../TIME/hal_timer.c:32:6:hal_CreatTimer	16	static
+../TIME/hal_timer.c:48:22:hal_CtrlTimerAction	16	static
+../TIME/hal_timer.c:67:21:hal_GetTimerState	16	static
+../TIME/hal_timer.c:84:22:hal_DeleteTimer	16	static
+../TIME/hal_timer.c:103:22:hal_ResetTimer	16	static
+../TIME/hal_timer.c:122:13:hal_TimerHandle	16	static
+../TIME/hal_timer.c:137:6:TIM4_IRQHandler	8	static
