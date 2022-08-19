@@ -6,6 +6,8 @@
         "hal_time.h": "c",
         "stm32f7xx_hal_tim.h": "c",
         "led.h": "c",
-        "stm32f7xx_it.h": "c"
+        "stm32f7xx_it.h": "c",
+        "stdio.h": "c",
+        "key.h": "c"
     }
 }
