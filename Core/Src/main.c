@@ -27,8 +27,11 @@
 #include "OS_System.h"
 #include "cpu.h"
 #include "hal_time.h"
+#include "key.h"
 #include "led.h"
+#include "user.h"
 #include <stdio.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,10 +101,17 @@ int main(void) {
   OS_TaskInit();
   hal_TimeInit();
 
-  hal_CreatTimer(T_LED, hal_ledProc, 20000,
-                 T_STA_START); /* ¶¨Ê±Æ÷ÖÐ¶Ï²âÊÔ¹¦ÄÜ */
+  // hal_CreatTimer(T_LED, hal_ledProc, 20000, T_STA_START); /* ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ð¶Ï²ï¿½ï¿½Ô¹ï¿½ï¿½ï¿½
+  // */
 
-  // OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN);/* OS ²âÊÔÈÎÎñ */
+  //  OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN); /* OS ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+
+  hal_KeyInit();
+  OS_CreatTask(OS_TASK2, hal_KeyProc, 1, OS_RUN);
+
+  // UserInit();
+  // OS_CreatTask(OS_TASK2, UserProc, 10, OS_RUN);
+
   OS_Start();
   /* USER CODE END 2 */
 

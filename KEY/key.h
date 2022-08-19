@@ -8,7 +8,7 @@ typedef enum {
   KEY_S1, //上
   KEY_S2, //下
   KEY_S3, //左
-  KEY_S4, //右
+  // KEY_S4, //右
   KEY_SUM
 } KEY_TYPEDEF;
 
@@ -17,7 +17,7 @@ typedef enum {
   KEY_STEP_WAIT,            //等待按键
   KEY_STEP_CLICK,           //按键按下
   KEY_STEP_LONG_PRESS,      //长按
-  KEY_SYEP_CONTINUOUS_PRESS //持续长按
+  KEY_STEP_CONTINUOUS_PRESS //持续长按
 } KEY_STEP_TYPEDEF;
 
 /* 定义一个按键检测的状态值 */
@@ -84,6 +84,8 @@ typedef void (*KeyEvent_CallBack_t)(KEY_VALUE_TYPEDEF keys);
 
 /* 持续长按间隔时间 */
 #define KEY_PRESS_CONTINUE_TIME 15 // 150MS
+
+extern unsigned char KEY_Scan_Msg;
 
 void hal_KeyInit(void);
 void hal_KeyProc(void);

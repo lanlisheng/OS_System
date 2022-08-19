@@ -1,0 +1,3 @@
+../USER/user.c:8:6:UserInit	8	static
+../USER/user.c:9:6:UserProc	8	static
+../USER/user.c:18:13:KeyEventHandle	16	static

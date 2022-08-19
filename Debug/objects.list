@@ -32,3 +32,4 @@
 "./LED/led.o"
 "./OS/OS_System.o"
 "./TIME/hal_timer.o"
+"./USER/user.o"

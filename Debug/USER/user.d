@@ -1,4 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+USER/user.o: ../USER/user.c ../USER/user.h \
+ C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -28,15 +29,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- ../Core/Inc/gpio.h ../Core/Inc/main.h ../Core/Inc/tim.h \
- ../Core/Inc/usart.h \
- C:/Users/OptimusPrime/Desktop/OS_System/OS/OS_System.h \
- C:/Users/OptimusPrime/Desktop/OS_System/CPU/cpu.h \
- C:/Users/OptimusPrime/Desktop/OS_System/TIME/hal_time.h \
- C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h \
- C:/Users/OptimusPrime/Desktop/OS_System/LED/led.h \
- C:/Users/OptimusPrime/Desktop/OS_System/USER/user.h
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
+../USER/user.h:
+C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -68,13 +63,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
-../Core/Inc/gpio.h:
-../Core/Inc/main.h:
-../Core/Inc/tim.h:
-../Core/Inc/usart.h:
-C:/Users/OptimusPrime/Desktop/OS_System/OS/OS_System.h:
-C:/Users/OptimusPrime/Desktop/OS_System/CPU/cpu.h:
-C:/Users/OptimusPrime/Desktop/OS_System/TIME/hal_time.h:
-C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h:
-C:/Users/OptimusPrime/Desktop/OS_System/LED/led.h:
-C:/Users/OptimusPrime/Desktop/OS_System/USER/user.h:

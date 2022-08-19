@@ -1,6 +1,6 @@
-../KEY/key.c:19:6:hal_KeyInit	16	static
-../KEY/key.c:32:6:hal_KeyScanCBSRegister	16	static
-../KEY/key.c:38:6:hal_KeyProc	24	static
-../KEY/key.c:100:22:hal_getKey1Sta	4	static
-../KEY/key.c:101:22:hal_getKey2Sta	4	static
-../KEY/key.c:102:22:hal_getKey3Sta	4	static
+../KEY/key.c:21:6:hal_KeyInit	16	static
+../KEY/key.c:36:6:hal_KeyScanCBSRegister	16	static
+../KEY/key.c:45:6:hal_KeyProc	24	static
+../KEY/key.c:108:22:hal_getKey1Sta	8	static
+../KEY/key.c:111:22:hal_getKey2Sta	8	static
+../KEY/key.c:114:22:hal_getKey3Sta	8	static

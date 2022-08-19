@@ -8,6 +8,7 @@
         "led.h": "c",
         "stm32f7xx_it.h": "c",
         "stdio.h": "c",
-        "key.h": "c"
+        "key.h": "c",
+        "usart.h": "c"
     }
 }

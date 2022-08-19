@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include USER/subdir.mk
 -include TIME/subdir.mk
 -include OS/subdir.mk
 -include LED/subdir.mk
@@ -57,6 +58,12 @@ default.size.stdout \
 OBJDUMP_LIST += \
 STM32F767IGT6_OS.list \
 
+OBJCOPY_HEX += \
+STM32F767IGT6_OS.hex \
+
+OBJCOPY_BIN += \
+STM32F767IGT6_OS.bin \
+
 
 # All Target
 all: main-build
@@ -66,7 +73,7 @@ main-build: STM32F767IGT6_OS.elf secondary-outputs
 
 # Tool invocations
 STM32F767IGT6_OS.elf STM32F767IGT6_OS.map: $(OBJS) $(USER_OBJS) C:\Users\OptimusPrime\Desktop\OS_System\STM32F767IGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32F767IGT6_OS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\OptimusPrime\Desktop\OS_System\STM32F767IGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32F767IGT6_OS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "STM32F767IGT6_OS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\OptimusPrime\Desktop\OS_System\STM32F767IGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32F767IGT6_OS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -80,12 +87,22 @@ STM32F767IGT6_OS.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS
 	@echo 'Finished building: $@'
 	@echo ' '
 
+STM32F767IGT6_OS.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "STM32F767IGT6_OS.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+STM32F767IGT6_OS.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "STM32F767IGT6_OS.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) STM32F767IGT6_OS.elf STM32F767IGT6_OS.list STM32F767IGT6_OS.map default.size.stdout
+	-$(RM) STM32F767IGT6_OS.bin STM32F767IGT6_OS.elf STM32F767IGT6_OS.hex STM32F767IGT6_OS.list STM32F767IGT6_OS.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
