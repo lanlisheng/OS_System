@@ -101,14 +101,14 @@ int main(void) {
   OS_TaskInit();
   hal_TimeInit();
 
-  // hal_CreatTimer(T_LED, hal_ledProc, 20000, T_STA_START); /* ��ʱ���жϲ��Թ���
+  // hal_CreatTimer(T_LED, hal_ledProc, 20000, T_STA_START);
   // */
 
-  //  OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN); /* OS �������� */
+  //  OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN);
 
   hal_KeyInit();
-  OS_CreatTask(OS_TASK2, hal_KeyProc, 1, OS_RUN);
 
+  OS_CreatTask(OS_TASK2, hal_KeyProc, 1, OS_RUN);
   // UserInit();
   // OS_CreatTask(OS_TASK2, UserProc, 10, OS_RUN);
 
