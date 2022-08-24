@@ -1,9 +1,7 @@
 #include "led.h"
 #include "OS_System.h"
-#include "gpio.h"
 #include "hal_time.h"
-#include "main.h"
-#include <stdio.h>
+#include "stm32f7xx.h"
 
 Queue4 LedCmdBuff[LED_SUM]; /* LED Control Mail */
 

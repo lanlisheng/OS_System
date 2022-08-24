@@ -1,1 +1,7 @@
-../LED/led.c:7:6:hal_ledProc	8	static
+../LED/led.c:35:6:hal_LedInit	16	static
+../LED/led.c:51:6:hal_LedProc	24	static
+../LED/led.c:111:6:LedMsgInput	32	static
+../LED/led.c:125:13:hal_ledConfig	4	static
+../LED/led.c:128:13:hal_LedHandle	16	static
+../LED/led.c:159:13:hal_Led1Drive	16	static
+../LED/led.c:167:13:hal_BuzDrive	16	static

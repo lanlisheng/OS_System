@@ -22,7 +22,7 @@ typedef enum {
   LED_BLINK4
 } LED_EFFECT_TYPEDEF;
 
-void hal_ledProc(void);
+void hal_LedProc(void);
 void hal_LedInit(void);
 void LedMsgInput(unsigned char type, LED_EFFECT_TYPEDEF cmd, unsigned char clr);
 #endif

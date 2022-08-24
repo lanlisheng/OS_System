@@ -23,11 +23,11 @@ extern unsigned short S_QueueDataLen(unsigned char **Head, unsigned char **Tail,
                 (unsigned char *)(x).Buff, sizeof((x).Buff), y, z)
 
 #define QueueDataOut(x, y)                                                     \
-  ((unsigned char **)&(x).Head, (unsigned char **)&(x).Tail,                   \
-   (unsigned char *)(x).Buff, sizeof((x).Buff), y)
+  S_QueueDataOut((unsigned char **)&(x).Head, (unsigned char **)&(x).Tail,     \
+                 (unsigned char *)(x).Buff, sizeof((x).Buff), y)
 #define QueueDataLen(x)                                                        \
-  ((unsigned char **)&(x).Head, (unsigned char **)&(x).Tail,                   \
-   (unsigned char *)(x).Buff, sizeof((x).Buff))
+  S_QueueDataLen((unsigned char **)&(x).Head, (unsigned char **)&(x).Tail,     \
+                 (unsigned char *)(x).Buff, sizeof((x).Buff))
 
 /* 1.�����һ�����е����ݽṹ */
 typedef struct {
@@ -123,14 +123,14 @@ typedef enum {
 } CPU_EA_TYPEDEF;
 
 /* ����һ��CPU�жϿ��ƻص�����ָ�룬������CPUInterrupt_CallBack_t
- * �βΣ�- cmd    ������CPU�жϴ򿪻��ǹر��ж��ٽ硣
+ * �βΣ�- cmd ������CPU�жϴ򿪻��ǹر��ж��ٽ硣
  *      - *pSta  : ͨ��ָ�봫���ַ
  * */
 typedef void (*CPUInterrupt_CallBack_t)(CPU_EA_TYPEDEF cmd,
                                         unsigned char *pSta);
 
 //ϵͳ����ID.����:��ö�������������С
-typedef enum { OS_TASK1, OS_TASK2, OS_TASK_SUM } OS_TaskID_TypeDef;
+typedef enum { OS_TASK1, OS_TASK2, OS_TASK3, OS_TASK_SUM } OS_TaskID_TypeDef;
 
 //ϵͳ��������״̬
 typedef enum {
@@ -141,7 +141,8 @@ typedef enum {
 // ��дϵͳ�ں�֮��һ��:����ϵͳ����ṹ��
 typedef struct {
   void (*task)(void); //������ָ��:����ָ��ָ������,һ����while(1)�еĺ���
-  OS_TaskStatusTypeDef RunFlag; //��������״̬:���߻�������
+  OS_TaskStatusTypeDef
+      RunFlag; //��������״̬:���߻�������
   unsigned short RunPeriod; //�������Ƶ��:����ָ��Ĵ�����ִ�е�Ƶ��
   unsigned short RunTimer; //������ȼ�ʱ��:ʱ��ﵽ�������Ƶ��ʱ,����ᱻִ��
 } OS_TaskTypeDef;

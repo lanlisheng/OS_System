@@ -99,8 +99,9 @@ void hal_KeyProc(void) {
       break;
     }
     if (keys) {
-      printf("keys is :%d\r\n", keys);
-      KEY_Scan_Msg = keys;
+      if (KeyScanCBS) {
+        KeyScanCBS((KEY_VALUE_TYPEDEF)keys);
+      }
     }
   }
 }

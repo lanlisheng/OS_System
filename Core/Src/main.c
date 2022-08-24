@@ -104,13 +104,14 @@ int main(void) {
   // hal_CreatTimer(T_LED, hal_ledProc, 20000, T_STA_START);
   // */
 
-  //  OS_CreatTask(OS_TASK1, hal_ledProc, 10, OS_RUN);
+  hal_LedInit();
+  OS_CreatTask(OS_TASK1, hal_LedProc, 1, OS_RUN);
 
   hal_KeyInit();
-
   OS_CreatTask(OS_TASK2, hal_KeyProc, 1, OS_RUN);
-  // UserInit();
-  // OS_CreatTask(OS_TASK2, UserProc, 10, OS_RUN);
+
+  UserInit();
+  OS_CreatTask(OS_TASK3, UserProc, 1, OS_RUN);
 
   OS_Start();
   /* USER CODE END 2 */
