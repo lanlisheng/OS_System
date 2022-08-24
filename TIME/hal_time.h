@@ -2,7 +2,9 @@
 #define _HAL_TIME_H
 
 typedef enum {
-  T_LED, // LED定时器
+  T_LED,           // LED定时器
+  T_RFD_PULSH_RCV, // Read frequency of wireless data pin level
+  T_RFD_RECODEFLT, //无线重复码过滤延时
   T_SUM
 } TIMER_ID_TYPEDEF;
 
