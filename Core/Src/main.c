@@ -113,6 +113,9 @@ int main(void) {
   UserInit();
   OS_CreatTask(OS_TASK3, UserProc, 1, OS_RUN);
 
+  UserInit();
+  OS_CreatTask(OS_TASK4, UserProc, 1, OS_RUN);
+
   OS_Start();
   /* USER CODE END 2 */
 

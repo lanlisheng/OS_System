@@ -1,0 +1,13 @@
+../EEPROM/eeprom.c:16:13:hal_I2CConfig	40	static
+../EEPROM/eeprom.c:31:13:I2C_delay	24	static
+../EEPROM/eeprom.c:37:6:hal_eepromInit	8	static
+../EEPROM/eeprom.c:39:13:I2C_Start	8	static
+../EEPROM/eeprom.c:48:13:I2C_Stop	8	static
+../EEPROM/eeprom.c:57:13:I2C_Ack	8	static
+../EEPROM/eeprom.c:68:13:I2C_NoAck	8	static
+../EEPROM/eeprom.c:79:22:I2C_WaitAck	8	static
+../EEPROM/eeprom.c:93:13:I2C_SendByte	24	static
+../EEPROM/eeprom.c:117:13:I2C_WriteByte	16	static
+../EEPROM/eeprom.c:135:22:I2C_ReceiveByte	16	static
+../EEPROM/eeprom.c:159:15:I2C_ReadByte	24	static
+../EEPROM/eeprom.c:182:6:I2C_Read	24	static

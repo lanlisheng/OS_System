@@ -1,12 +1,37 @@
 #include "user.h"
+#include "eeprom.h"
 #include "key.h"
 #include "led.h"
 #include "main.h"
 #include "stm32f7xx.h"
+#include <stdio.h>
 
 static void KeyEventHandle(KEY_VALUE_TYPEDEF keys);
 
-void UserInit(void) { hal_KeyScanCBSRegister(KeyEventHandle); }
+void UserInit(void) {
+  unsigned char writeAry[66], readAry[66], i;
+
+  hal_eepromInit();
+  hal_KeyScanCBSRegister(KeyEventHandle);
+
+  for (i = 0; i < 66; i++) {
+    writeAry[i] = i + 1;
+    readAry[i] = 0;
+  }
+
+  I2C_Read(0, readAry, 66);
+  printf("eeprom is ok\r\nDATA IS:\r");
+  for (uint8_t i = 0; i < 66; i++) {
+    printf("%d\n");
+  }
+  printf("\r\n");
+  if ((readAry[0] == 1) && (readAry[1] == 2) && (readAry[2] == 3)) {
+    LedMsgInput(LED1, LED_BLINK4, 1);
+
+  } else {
+    // I2C_PageWrite(0, writeAry, 66);
+  }
+}
 
 void UserProc(void) {}
 

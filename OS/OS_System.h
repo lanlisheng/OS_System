@@ -130,7 +130,13 @@ typedef void (*CPUInterrupt_CallBack_t)(CPU_EA_TYPEDEF cmd,
                                         unsigned char *pSta);
 
 //ϵͳ����ID.����:��ö�������������С
-typedef enum { OS_TASK1, OS_TASK2, OS_TASK3, OS_TASK_SUM } OS_TaskID_TypeDef;
+typedef enum {
+  OS_TASK1,
+  OS_TASK2,
+  OS_TASK3,
+  OS_TASK4,
+  OS_TASK_SUM
+} OS_TaskID_TypeDef;
 
 //ϵͳ��������״̬
 typedef enum {

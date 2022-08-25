@@ -27,6 +27,7 @@ CPU \
 Core/Src \
 Core/Startup \
 Drivers/STM32F7xx_HAL_Driver/Src \
+EEPROM \
 KEY \
 LED \
 OS \

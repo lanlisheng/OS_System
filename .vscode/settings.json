@@ -10,6 +10,7 @@
         "stdio.h": "c",
         "key.h": "c",
         "usart.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "eeprom.h": "c"
     }
 }
