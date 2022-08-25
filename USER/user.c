@@ -193,6 +193,22 @@ static void stgMenu_MainMenuCBS(void) {
   }
 }
 
+/* Detector pairing menu handler */
+static void stgMenu_LearnSensorCBS(void) {}
+
+/* Detector list menu handler */
+static void stgMenu_DTCListCBS(void) {}
+
+/* Wifi distribution menu handler function */
+
+static void stgMenu_WifiCBS(void) {}
+
+/* Device information menu handler */
+static void stgMenu_MachineInfoCBS(void) {}
+
+/* 恢复出厂设置菜单处理函数 */
+static void stgMenu_FactorySettingsCBS(void) {}
+
 /* 按键回调函数，驱动层回调处理函数 */
 static void KeyEventHandle(KEY_VALUE_TYPEDEF keys) {
   if ((keys == KEY1_CLICK) || (keys == KEY2_CLICK) || (keys == KEY3_CLICK)) {
