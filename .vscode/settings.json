@@ -11,6 +11,7 @@
         "key.h": "c",
         "usart.h": "c",
         "stdbool.h": "c",
-        "eeprom.h": "c"
+        "eeprom.h": "c",
+        "rfd.h": "c"
     }
 }
