@@ -1,6 +1,4 @@
-USER/user.o: ../USER/user.c ../USER/user.h \
- C:/Users/OptimusPrime/Desktop/OS_System/EEPROM/eeprom.h \
- C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h ../Core/Inc/main.h \
+EEPROM/ctiic.o: ../EEPROM/ctiic.c ../EEPROM/ctiic.h ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -30,11 +28,8 @@ USER/user.o: ../USER/user.c ../USER/user.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- C:/Users/OptimusPrime/Desktop/OS_System/LED/led.h
-../USER/user.h:
-C:/Users/OptimusPrime/Desktop/OS_System/EEPROM/eeprom.h:
-C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h:
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
+../EEPROM/ctiic.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -66,4 +61,3 @@ C:/Users/OptimusPrime/Desktop/OS_System/KEY/key.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
-C:/Users/OptimusPrime/Desktop/OS_System/LED/led.h:

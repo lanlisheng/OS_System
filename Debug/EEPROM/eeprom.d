@@ -1,5 +1,5 @@
-EEPROM/eeprom.o: ../EEPROM/eeprom.c ../EEPROM/eeprom.h ../Core/Inc/main.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+EEPROM/eeprom.o: ../EEPROM/eeprom.c ../EEPROM/eeprom.h ../EEPROM/ctiic.h \
+ ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -30,6 +30,7 @@ EEPROM/eeprom.o: ../EEPROM/eeprom.c ../EEPROM/eeprom.h ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
 ../EEPROM/eeprom.h:
+../EEPROM/ctiic.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:

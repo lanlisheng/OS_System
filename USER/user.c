@@ -18,11 +18,13 @@ void UserInit(void) {
     writeAry[i] = i + 1;
     readAry[i] = 0;
   }
-
-  I2C_Read(0, readAry, 66);
-  printf("eeprom is ok\r\nDATA IS:\r");
+  I2C_PageWrite(0, writeAry, 66);
   for (uint8_t i = 0; i < 66; i++) {
-    printf("%d\n");
+    printf("%d\n", writeAry[i]);
+  }
+  I2C_Read(0, readAry, 66);
+  for (uint8_t i = 0; i < 66; i++) {
+    printf("%d\n", readAry[i]);
   }
   printf("\r\n");
   if ((readAry[0] == 1) && (readAry[1] == 2) && (readAry[2] == 3)) {

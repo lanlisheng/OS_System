@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../EEPROM/ctiic.c \
 ../EEPROM/eeprom.c 
 
 OBJS += \
+./EEPROM/ctiic.o \
 ./EEPROM/eeprom.o 
 
 C_DEPS += \
+./EEPROM/ctiic.d \
 ./EEPROM/eeprom.d 
 
 
@@ -21,7 +24,7 @@ EEPROM/%.o EEPROM/%.su: ../EEPROM/%.c EEPROM/subdir.mk
 clean: clean-EEPROM
 
 clean-EEPROM:
-	-$(RM) ./EEPROM/eeprom.d ./EEPROM/eeprom.o ./EEPROM/eeprom.su
+	-$(RM) ./EEPROM/ctiic.d ./EEPROM/ctiic.o ./EEPROM/ctiic.su ./EEPROM/eeprom.d ./EEPROM/eeprom.o ./EEPROM/eeprom.su
 
 .PHONY: clean-EEPROM
 

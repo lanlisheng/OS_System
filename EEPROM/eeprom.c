@@ -1,212 +1,168 @@
 #include "eeprom.h"
+#include "ctiic.h"
 
-// //控制I2C速度的延时
-// void CT_Delay(void) { I2C_delay(2); }
+#define EEPROM_PAGE_SIZE 32
 
-static void hal_I2CConfig(void);
-static void I2C_delay(__IO uint32_t Delay);
-static void I2C_Start(void);
-static void I2C_Stop(void);
-static void I2C_NoAck(void);
-static unsigned char I2C_WaitAck(void);
-static void I2C_SendByte(unsigned char SendByte);
-static unsigned char I2C_ReceiveByte(void);
-static void I2C_WriteByte(unsigned short address, unsigned char dat);
+void hal_eepromInit(void) { CT_IIC_Init(); }
 
-static void hal_I2CConfig(void) {
-  GPIO_InitTypeDef GPIO_Initure;
-  __HAL_RCC_GPIOH_CLK_ENABLE(); // Start the GPIOH clock
-  __HAL_RCC_GPIOI_CLK_ENABLE(); // Start the GPIOI clock
-
-  GPIO_Initure.Pin = GPIO_PIN_6;           // PH6
-  GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; // Push-pull output
-  GPIO_Initure.Pull = GPIO_PULLUP;         // 上拉
-  GPIO_Initure.Speed = GPIO_SPEED_HIGH;    // 高速
-  HAL_GPIO_Init(GPIOH, &GPIO_Initure);     // Initialize
-
-  GPIO_Initure.Pin = GPIO_PIN_3;       // PI3
-  HAL_GPIO_Init(GPIOI, &GPIO_Initure); // Initialize
-}
-
-static void I2C_delay(__IO uint32_t Delay) {
-  uint32_t delay = (HAL_RCC_GetHCLKFreq() / 4000000 * Delay);
-  while (delay--)
-    ;
-}
-
-void hal_eepromInit(void) { hal_I2CConfig(); }
-
-static void I2C_Start(void) {
-  hal_I2C_SDA(1);
-  I2C_delay(1);
-  hal_I2C_SCL(1);
-  I2C_delay(1);
-  hal_I2C_SDA(0);
-  I2C_delay(1);
-}
-
-static void I2C_Stop(void) {
-  hal_I2C_SDA(0);
-  I2C_delay(1);
-  hal_I2C_SCL(1);
-  I2C_delay(1);
-  hal_I2C_SDA(1);
-  I2C_delay(1);
-}
-
-static void I2C_Ack(void) {
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-  hal_I2C_SDA(0);
-  I2C_delay(1);
-  hal_I2C_SCL(1);
-  I2C_delay(1);
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-}
-
-static void I2C_NoAck(void) {
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-  hal_I2C_SDA(1);
-  I2C_delay(1);
-  hal_I2C_SCL(1);
-  I2C_delay(1);
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-}
-
-static unsigned char I2C_WaitAck(void) {
-  hal_I2C_SDA(1);
-  hal_I2C_SDA_IO_IN();
-  hal_I2C_SCL(1);
-  I2C_delay(1);
-  if (hal_I2C_SDA_INPUT()) {
-    return 0;
-  }
-  hal_I2C_SCL(0);
-  hal_I2C_SDA_IO_OUT();
-  I2C_delay(1);
-  return 1;
-}
-
-static void I2C_SendByte(unsigned char SendByte) {
-  unsigned char i = 0;
-  unsigned char temp;
-  temp = SendByte;
-  for (i = 0; i < 8; i++) {
-    hal_I2C_SCL(0);
-    I2C_delay(1);
-    if (temp & 0x80) {
-      hal_I2C_SDA(1);
-    } else {
-      hal_I2C_SDA(0);
-    }
-    I2C_delay(1);
-    hal_I2C_SCL(1);
-    I2C_delay(1);
-    temp <<= 1;
-  }
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-  hal_I2C_SDA(1);
-  I2C_delay(1);
-}
-
-/* Bytes to write */
+//字节写
 static void I2C_WriteByte(unsigned short address, unsigned char dat) {
-  I2C_Start();
+  CT_IIC_Start();
 
   I2C_SendByte(0xA0);
-  I2C_WaitAck();
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte((address >> 8) & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte((address >> 8) & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte(address & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte(address & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte(dat);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte(dat);
+  CT_IIC_Wait_Ack();
 
-  I2C_Stop();
+  CT_IIC_Stop();
+  // I2C_delay(1000);			//延时10ms
 }
 
-static unsigned char I2C_ReceiveByte(void) {
-  unsigned char i;
-  unsigned char ReceiveByte = 0;
-
-  hal_I2C_SCL(0);
-  I2C_delay(1);
-  hal_I2C_SDA(1);
-  hal_I2C_SDA_IO_IN(); // SDA设置成输入
-  for (i = 0; i < 8; i++) {
-    ReceiveByte <<= 1;
-    I2C_delay(1);
-    hal_I2C_SCL(1);
-    I2C_delay(1);
-    if (hal_I2C_SDA_INPUT()) {
-      ReceiveByte |= 0x01;
+//页写函数,有自动翻页功能,24C64一页32Byte,num最大可写65523个字节
+void I2C_PageWrite(unsigned short address, unsigned char *pDat,
+                   unsigned short num) {
+  unsigned char *pBuffer, j;
+  unsigned short len, i, page, remainder, addr, temp;
+  pBuffer = pDat;
+  len = num;
+  addr = address;
+  temp = 0;
+  if (addr % EEPROM_PAGE_SIZE) //判断要写的地址
+  {
+    temp =
+        EEPROM_PAGE_SIZE -
+        (addr % EEPROM_PAGE_SIZE); // 32-7=25 //计算出当前地址还差多少字节满1页
+    if (len <= temp) {
+      temp = len;
     }
-    hal_I2C_SCL(0);
   }
-  hal_I2C_SDA_IO_OUT(); // SDA设置成输出
-  I2C_delay(1);
-  return ReceiveByte;
+
+  //先填满写入地址页
+  if (temp) {
+    CT_IIC_Start();
+
+    CT_IIC_Send_Byte(0xA0);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte((addr >> 8) & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte(addr & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    for (j = 0; j < temp; j++) {
+      CT_IIC_Send_Byte(pBuffer[j]);
+      CT_IIC_Wait_Ack();
+    }
+    CT_IIC_Stop();
+    // I2C_delay(20000);
+  }
+
+  len -= temp;
+  addr += temp; //地址加上已经写入的字节
+
+  page = len / EEPROM_PAGE_SIZE;
+  remainder = len % EEPROM_PAGE_SIZE;
+  for (i = 0; i < page; i++) {
+    CT_IIC_Start();
+    CT_IIC_Send_Byte(0xA0);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte((addr >> 8) & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte(addr & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    for (j = 0; j < EEPROM_PAGE_SIZE; j++) {
+      CT_IIC_Send_Byte(pBuffer[temp + j]);
+      CT_IIC_Wait_Ack();
+    }
+    CT_IIC_Stop();
+    addr += EEPROM_PAGE_SIZE;
+    temp += EEPROM_PAGE_SIZE;
+    // I2C_delay(20000);
+  }
+
+  if (remainder) {
+    CT_IIC_Start();
+    CT_IIC_Send_Byte(0xA0);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte((addr >> 8) & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    CT_IIC_Send_Byte(addr & 0xFF);
+    CT_IIC_Wait_Ack();
+
+    for (j = 0; j < remainder; j++) {
+      CT_IIC_Send_Byte(pBuffer[temp + j]);
+      CT_IIC_Wait_Ack();
+    }
+    CT_IIC_Stop();
+    // I2C_delay(20000);
+  }
 }
 
-// Read 1 byte
+//读1个字节
 unsigned char I2C_ReadByte(unsigned short address) {
   unsigned char dat;
-  I2C_Start();
-  I2C_SendByte(0xA0);
-  I2C_WaitAck();
+  CT_IIC_Start();
+  CT_IIC_Send_Byte(0xA0);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte((address >> 8) & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte((address >> 8) & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte(address & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte(address & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_Start();
-  I2C_SendByte(0xA1);
-  I2C_WaitAck();
+  CT_IIC_Start();
+  CT_IIC_Send_Byte(0xA1);
+  CT_IIC_Wait_Ack();
 
-  dat = I2C_ReceiveByte();
-  I2C_NoAck();
-  I2C_Stop();
+  dat = CT_IIC_Read_Byte(1);
+  CT_IIC_NAck();
+  CT_IIC_Stop();
   return dat;
 }
 
-// Read multiple bytes in succession
+//连续读多个字节
 void I2C_Read(unsigned short address, unsigned char *pBuffer,
               unsigned short len) {
   unsigned short length;
   length = len;
-  I2C_Start();
-  I2C_SendByte(0xA0);
-  I2C_WaitAck();
+  CT_IIC_Start();
+  CT_IIC_Send_Byte(0xA0);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte((address >> 8) & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte((address >> 8) & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_SendByte(address & 0xFF);
-  I2C_WaitAck();
+  CT_IIC_Send_Byte(address & 0xFF);
+  CT_IIC_Wait_Ack();
 
-  I2C_Start();
-  I2C_SendByte(0xA1);
-  I2C_WaitAck();
+  CT_IIC_Start();
+  CT_IIC_Send_Byte(0xA1);
+  CT_IIC_Wait_Ack();
 
   // dat = I2C_ReceiveByte();
   while (length) {
-    *pBuffer = I2C_ReceiveByte();
+    *pBuffer = CT_IIC_Read_Byte(1);
     if (length == 1)
-      I2C_NoAck();
+      CT_IIC_NAck();
     else
-      I2C_Ack();
+      CT_IIC_Ack();
     pBuffer++;
     length--;
   }
 
-  I2C_Stop();
+  CT_IIC_Stop();
 }
