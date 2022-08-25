@@ -1,38 +1,27 @@
 #include "user.h"
+#include "OS_System.h"
 #include "eeprom.h"
 #include "key.h"
 #include "led.h"
 #include "main.h"
+#include "para.h"
+#include "rfd.h"
 #include "stm32f7xx.h"
 #include <stdio.h>
 
 static void KeyEventHandle(KEY_VALUE_TYPEDEF keys);
+static void RfdRcvHandle(unsigned char *pBuff);
+
+Queue8 RFDRcvMsg; // RFD接收队列
 
 void UserInit(void) {
-  unsigned char writeAry[66], readAry[66], i;
+  // unsigned char writeAry[66], readAry[66], i;
 
   hal_eepromInit();
+  ParaInit();
+  QueueEmpty(RFDRcvMsg);
   hal_KeyScanCBSRegister(KeyEventHandle);
-
-  for (i = 0; i < 66; i++) {
-    writeAry[i] = i + 1;
-    readAry[i] = 0;
-  }
-  I2C_PageWrite(0, writeAry, 66);
-  for (uint8_t i = 0; i < 66; i++) {
-    printf("%d\n", writeAry[i]);
-  }
-  I2C_Read(0, readAry, 66);
-  for (uint8_t i = 0; i < 66; i++) {
-    printf("%d\n", readAry[i]);
-  }
-  printf("\r\n");
-  if ((readAry[0] == 1) && (readAry[1] == 2) && (readAry[2] == 3)) {
-    LedMsgInput(LED1, LED_BLINK4, 1);
-
-  } else {
-    // I2C_PageWrite(0, writeAry, 66);
-  }
+  hal_RFCRcvCBSRegister(RfdRcvHandle);
 }
 
 void UserProc(void) {}
@@ -50,4 +39,11 @@ static void KeyEventHandle(KEY_VALUE_TYPEDEF keys) {
              (keys == KEY3_LONG_PRESS)) {
     LedMsgInput(LED1, LED_DARK, 1);
   }
+}
+
+static void RfdRcvHandle(unsigned char *pBuff) {
+  unsigned char temp;
+  temp = '#';
+  QueueDataIn(RFDRcvMsg, &temp, 1);
+  QueueDataIn(RFDRcvMsg, &pBuff[0], 3);
 }
