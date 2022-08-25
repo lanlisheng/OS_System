@@ -6,12 +6,16 @@
 
 KeyEvent_CallBack_t KeyScanCBS;
 
+static unsigned char hal_getKey0Sta(void);
 static unsigned char hal_getKey1Sta(void);
 static unsigned char hal_getKey2Sta(void);
 static unsigned char hal_getKey3Sta(void);
+static unsigned char hal_getKey4Sta(void);
+static unsigned char hal_getKey5Sta(void);
 
-unsigned char (*getKeysState[KEY_SUM])() = {hal_getKey1Sta, hal_getKey2Sta,
-                                            hal_getKey3Sta};
+unsigned char (*getKeysState[KEY_SUM])() = {hal_getKey0Sta, hal_getKey1Sta,
+                                            hal_getKey2Sta, hal_getKey3Sta,
+                                            hal_getKey4Sta, hal_getKey5Sta};
 
 unsigned char KeyStep[KEY_SUM];            //按键检测流程
 unsigned short KeyScanTime[KEY_SUM];       //按键去抖延时
@@ -106,12 +110,22 @@ void hal_KeyProc(void) {
   }
 }
 
-static unsigned char hal_getKey1Sta(void) {
+static unsigned char hal_getKey0Sta(void) {
   return (!HAL_GPIO_ReadPin(KEY0_GPIO_Port, KEY0_Pin));
 }
-static unsigned char hal_getKey2Sta(void) {
+static unsigned char hal_getKey1Sta(void) {
   return (!HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin));
 }
-static unsigned char hal_getKey3Sta(void) {
+static unsigned char hal_getKey2Sta(void) {
   return (!HAL_GPIO_ReadPin(KEY2_GPIO_Port, KEY2_Pin));
+}
+
+static unsigned char hal_getKey3Sta(void) {
+  return (!HAL_GPIO_ReadPin(KEY3_GPIO_Port, KEY3_Pin));
+}
+static unsigned char hal_getKey4Sta(void) {
+  return (!HAL_GPIO_ReadPin(KEY4_GPIO_Port, KEY4_Pin));
+}
+static unsigned char hal_getKey5Sta(void) {
+  return (!HAL_GPIO_ReadPin(KEY5_GPIO_Port, KEY5_Pin));
 }

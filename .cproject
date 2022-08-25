@@ -85,14 +85,14 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="CPU"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="EEPROM"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="OS"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="USER"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="LED"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="TIME"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="KEY"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="EEPROM"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="KEY"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="LED"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="OS"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="TIME"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="USER"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

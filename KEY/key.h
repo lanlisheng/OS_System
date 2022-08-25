@@ -8,7 +8,9 @@ typedef enum {
   KEY_S1, //上
   KEY_S2, //下
   KEY_S3, //左
-  // KEY_S4, //右
+  KEY_S4, //右
+  KEY_S5, //取消
+  KEY_S6, //确定/菜单
   KEY_SUM
 } KEY_TYPEDEF;
 
