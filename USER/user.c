@@ -52,6 +52,14 @@ stu_mode_menu settingModeMenu[STG_MENU_SUM] = {
      stgMenu_FactorySettingsCBS, SCREEN_CMD_RESET, 0, 0xFF, 0, 0, 0, 0},
 };
 
+// 3.DTC list->Zone xxx->Review
+stu_mode_menu DL_ZX_Review[STG_MENU_SUM] = {
+    {STG_MENU_DL_ZX_REVIEW_MAIN, STG_SUB_2_MENU_POS, "View",
+     stgMenu_dl_ReviewMainCBS, SCREEN_CMD_RESET, 0, 0xFF, 0, 0, 0, 0},
+    {},
+    {},
+    {}};
+
 void UserInit(void) {
   // unsigned char writeAry[66], readAry[66], i;
 
@@ -194,10 +202,127 @@ static void stgMenu_MainMenuCBS(void) {
 }
 
 /* Detector pairing menu handler */
-static void stgMenu_LearnSensorCBS(void) {}
+static void stgMenu_LearnSensorCBS(void) {
+  unsigned char keys, dat, tBuff[3];
+  static unsigned char PairingComplete = 0;
+  static unsigned short Timer = 0;
+  Stu_DTC stuTempDevice; /* Used to initialize detector information when setting
+                            detector parameters */
+  if (pModeMenu->refreshScreenCmd == SCREEN_CMD_RESET) {
+    pModeMenu->refreshScreenCmd = SCREEN_CMD_NULL;
+    QueueEmpty(RFDRcvMsg);
+    keys = 0xFF;
+    PairingComplete = 0;
+    Timer = 0;
+  }
+
+  if (QueueDataLen(RFDRcvMsg) && (!PairingComplete)) {
+    QueueDataOut(RFDRcvMsg, &dat);
+    if (dat = '#') {
+      QueueDataOut(RFDRcvMsg, &tBuff[2]);
+      QueueDataOut(RFDRcvMsg, &tBuff[1]);
+      QueueDataOut(RFDRcvMsg, &tBuff[0]);
+
+      stuTempDevice.Code[2] = tBuff[2];
+      stuTempDevice.Code[1] = tBuff[1];
+      stuTempDevice.Code[0] = tBuff[0];
+
+      if (((stuTempDevice.Code[0] == SENSOR_CODE_DOOR_OPEN) ||
+           (stuTempDevice.Code[0] == SENSOR_CODE_DOOR_CLOSE) ||
+           (stuTempDevice.Code[0] == SENSOR_CODE_DOOR_TAMPER) ||
+           (stuTempDevice.Code[0] == SENSOR_CODE_DOOR_LOWPWR))) {
+        /* It's a wireless door status code */
+        stuTempDevice.DTCType = DTC_DOOR;
+      } else if ((stuTempDevice.Code[0] == SENSOR_CODE_REMOTE_ENARM) ||
+                 (stuTempDevice.Code[0] == SENSOR_CODE_REMOTE_DISARM) ||
+                 (stuTempDevice.Code[0] == SENSOR_CODE_REMOTE_HOMEARM) ||
+                 (stuTempDevice.Code[0] == SENSOR_CODE_REMOTE_SOS)) {
+        /* Wireless remote control code */
+        stuTempDevice.DTCType = DTC_REMOTE;
+      } else if ((stuTempDevice.Code[0] == SENSOR_CODE_PIR) ||
+                 (stuTempDevice.Code[0] == SENSOR_CODE_PIR_LOWPWR) ||
+                 (stuTempDevice.Code[0] == SENSOR_CODE_PIR_TAMPER)) {
+        /* Wireless infrared code */
+        stuTempDevice.DTCType = DTC_PIR_MOTION;
+      }
+      stuTempDevice.ZoneType = ZONE_TYP_1ST;
+      if (AddDtc(&stuTempDevice) != 0xFF) {
+        switch (stuTempDevice.DTCType) {
+        case DTC_DOOR:
+          /* UI displays a successful pairing:Added door dtc.. */
+          break;
+        case DTC_REMOTE:
+          /* Added remote dtc.. */
+          break;
+        case DTC_PIR_MOTION:
+          /* Added pir dtc.. */
+          break;
+        }
+        PairingComplete = 1; /* Match completion flag */
+        Timer = 0;
+      } else {
+        /* Fail... */
+      }
+    }
+  }
+
+  if (pModeMenu->keyVal != 0xFF) {
+    keys = pModeMenu->keyVal;
+    pModeMenu->keyVal = 0xFF;
+    switch (keys) {
+    case KEY5_CLICK_RELEASE: /* Cancel */
+      pModeMenu = pModeMenu->pParent;
+      pModeMenu->refreshScreenCmd = SCREEN_CMD_RECOVER;
+      break;
+    case KEY5_LONG_PRESS: /* Return to the desktop */
+      pModeMenu = &generalModeMenu[GNL_MENU_DESKTOP];
+      pModeMenu->refreshScreenCmd = SCREEN_CMD_RESET;
+      break;
+    }
+  }
+
+  if (PairingComplete) {
+    Timer++;
+    if (Timer > 150) {
+      Timer = 0;
+      pModeMenu = pModeMenu->pParent;
+      pModeMenu->refreshScreenCmd = SCREEN_CMD_RESET;
+    }
+  }
+}
 
 /* Detector list menu handler */
-static void stgMenu_DTCListCBS(void) {}
+static void stgMenu_DTCListCBS(void) {
+  unsigned char keys;
+  unsigned char i, j;
+  unsigned char ClrScreenFlag;
+  Stu_DTC tStuDtc;
+
+  static unsigned char DtcNameBuff[PARA_DTC_SUM][16];
+  static stu_mode_menu settingMode_DTCList_Sub_Menu[PARA_DTC_SUM];
+  static stu_mode_menu *pMenu = 0;
+  static stu_mode_menu *bpMenu = 0;
+  static unsigned char stgMainMenuSelectedPos = 0;
+  static stu_mode_menu *MHead, *MTail;
+  static unsigned char pMenuIdx = 0;
+
+  if (pModeMenu->refreshScreenCmd == SCREEN_CMD_RESET) {
+    pModeMenu->refreshScreenCmd = SCREEN_CMD_NULL;
+    pMenuIdx = 0;
+    stgMainMenuSelectedPos = 1;
+    bpMenu = 0;
+    ClrScreenFlag = 1;
+    keys = 0xFF;
+    pMenu = settingMode_DTCList_Sub_Menu;
+    /* Go through them one by one. Find the detectors that match */
+    for (i = 0; i < PARA_DTC_SUM; i++) {
+      if (CheckPresenceofDtc(i)) {
+        GetDtcStu(&tStuDtc, i);
+        (pMenu + pMenuIdx)->ID = pMenuIdx;
+      }
+    }
+  }
+}
 
 /* Wifi distribution menu handler function */
 
